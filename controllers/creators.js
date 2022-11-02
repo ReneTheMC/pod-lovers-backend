@@ -4,7 +4,7 @@ const router = express.Router();
 const Creator = require('../models/creator');
 const passport = require('passport');
 const axios = require("axios")
-let token;
+const token=process.env.TOKEN ;
 const clientKey = process.env.CLIENT_KEY;
 const clientSecret = process.env.CLIENT_SECRET;
 
