@@ -20,7 +20,7 @@ db.on("error", (error) => {
 
 const axios = require("axios");
 const Podcast = require('../models/podcast');
-// const { insertMany } = require('../models/podcast');
+
 
 axios({
   url: "https://api.podchaser.com/graphql",
@@ -52,41 +52,26 @@ axios({
       },
       data: {
         query: `query {
-            podcasts(searchTerm: "Reply All") {
+            podcasts(searchTerm: "Crime") {
                 paginatorInfo {
                     currentPage,
                     hasMorePages,
                     lastPage,
                 },
                 data {
-                    id,
+                    imageUrl,
                     title,
                     description,
-                    webUrl,
-                }
-            }
+              }
+          }  
         }`,
       },
     };
     axios
       .request(randPodcasts)
       .then((response) => {
-        console.log('Podcast....', response);
+        console.log('Loading Podcasts......',response.data.data.podcasts.data);
         let newPodcasts = [];
-        // response.data.data.podcasts.data.forEach((podcast) => {
-        //   newPodcasts.push({
-        //     imageUrl: podcast.imageUrl,
-        //     title: podcast.title,
-        //     description: podcast.description,
-        //   });
-        // });
-        // Podcast.insertMany(newPodcasts)
-        // .then(response => {
-        //     console.log(response)
-        // })
-        // .catch((error) => {
-        //     console.log('error', error)
-        // })
       })
       .catch((error) => {
         console.log("error", error);
