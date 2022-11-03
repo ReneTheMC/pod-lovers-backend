@@ -30,32 +30,47 @@ router.post('/', (req, res) => {
               `,
         },
       })
-      .then((result) => {
-        console.log(result.data);
-        token = result.data.data.requestAccessToken.access_token;
-    const options= {
-        method: 'post',
-        url: "https://api.podchaser.com/graphql",
-        params: {q: searchTerm},
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    };
- axios.get( "https://api.podchaser.com/graphql", options).then(function(response){
-
-    console.log(response.data.data.creators.data);
-    if (response.status === 200 && response.data.data.creators.data && response.data.data.creators.data.length) {
-        res.status(200).render('/', {creators: response.data.data.creators.data});
-    } else {
-        res.status(404).render('404');
-    }
-  }).catch(function (error) {
-      console.error(error);
-  });
-  });
+        .then((result) => {
+          console.log(result.data);
+          token = result.data.data.requestAccessToken.access_token;
+          const randCreators = {
+            method: "post",
+            url: "https://api.podchaser.com/graphql",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            data: {
+              query: `query {
+                  creators(searchTerm: "${searchTerm}") {
+                      paginatorInfo {
+                          currentPage,
+                          hasMorePages,
+                          lastPage,
+                      },
+                      data {
+                          name,
+                          bio,
+                          location,
+                    }
+                }  
+              }`,
+            },
+          };
+          axios
+            .request(randCreators)
+            .then((response) => {
+              console.log('LIZ.....',response.data.data.creators.data);
+              res.json({ creators: response.data.data.creators.data })
+            })
+            .catch((error) => {
+              console.log("error", error);
+            });
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+      
 })
-
-
 
      
 module.exports = router;

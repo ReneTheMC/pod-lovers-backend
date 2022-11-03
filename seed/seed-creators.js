@@ -49,37 +49,41 @@ axios({
         Authorization: `Bearer ${token}`,
       },
       data: {
-        query: ` query {
-          creators {
-              data {
-                  name,
-                  bio,
-                  location
+        query: `query {
+            creators(searchTerm: "Trevor Noah") {
+                paginatorInfo {
+                    currentPage,
+                    hasMorePages,
+                    lastPage,
+                },
+                data {
+                    name,
+                    bio,
+                    location,
               }
           }  
-        }    
-              `,
+        }`,
       },
     };
     axios
       .request(randCreators)
       .then((response) => {
-        console.log(response);
+        console.log('LIZ.....',response.data.data.creators.data);
         let newCreators = [];
-        response.data.data.creators.data.forEach((creator) => {
-          newCreators.push({
-            name: creator.name,
-            bio: creator.bio,
-            location: creator.location,
-          });
-        });
-        Creator.insertMany(newCreators)
-        .then(response => {
-            console.log(response)
-        })
-        .catch((error) => {
-            console.log('error', error)
-        })
+        // response.data.data.creators.data.forEach((creator) => {
+        //   newCreators.push({
+        //     name: creator.name,
+        //     bio: creator.bio,
+        //     location: creator.location,
+        //   });
+        // });
+        // Creator.insertMany(newCreators)
+        // .then(response => {
+        //     console.log(response)
+        // })
+        // .catch((error) => {
+        //     console.log('error', error)
+        // })
       })
       .catch((error) => {
         console.log("error", error);
