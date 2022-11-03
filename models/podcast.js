@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const podcastSchema = new Schema({
-    imageUrl: URL,
+    imageUrl: String,
     title: String,
     description: String
 });
