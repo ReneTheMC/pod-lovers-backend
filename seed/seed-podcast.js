@@ -51,6 +51,7 @@ axios({
         Authorization: `Bearer ${token}`,
       },
       data: {
+
         query: `query {
             podcasts(searchTerm: "Reply All") {
                 paginatorInfo {
@@ -66,11 +67,24 @@ axios({
                 }
             }
         }`,
+
+        query: ` query {
+          podcasts {
+              data {
+                  imageUrl,
+                  title,
+                  description
+              }
+          }  
+        }    
+              `,
+
       },
     };
     axios
       .request(randPodcasts)
       .then((response) => {
+
         console.log('Podcast....', response);
         let newPodcasts = [];
         // response.data.data.podcasts.data.forEach((podcast) => {
@@ -87,6 +101,24 @@ axios({
         // .catch((error) => {
         //     console.log('error', error)
         // })
+
+        console.log(response);
+        let newPodcasts = [];
+        response.data.data.podcasts.data.forEach((podcast) => {
+          newPodcasts.push({
+            imageUrl: podcast.imageUrl,
+            title: podcast.title,
+            description: podcast.description,
+          });
+        });
+        Podcast.insertMany(newPodcasts)
+        .then(response => {
+            console.log(response)
+        })
+        .catch((error) => {
+            console.log('error', error)
+        })
+
       })
       .catch((error) => {
         console.log("error", error);
