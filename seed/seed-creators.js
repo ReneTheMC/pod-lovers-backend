@@ -18,7 +18,7 @@ db.on("error", (error) => {
 
 const axios = require("axios");
 const Creator = require("../models/creator");
-const { insertMany } = require("../models/creator");
+
 
 axios({
   url: "https://api.podchaser.com/graphql",

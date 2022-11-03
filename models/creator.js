@@ -9,6 +9,14 @@ const creatorSchema = new Schema({
     location:String,
     imageUrl:String,
     socialLinks:String,
+users: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+}],
+comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment'
+}]
 });
 
 const Creator = mongoose.model('Creator', creatorSchema);
