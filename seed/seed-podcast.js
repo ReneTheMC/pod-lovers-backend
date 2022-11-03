@@ -51,37 +51,42 @@ axios({
         Authorization: `Bearer ${token}`,
       },
       data: {
-        query: ` query {
-          podcasts {
-              data {
-                  imageUrl,
-                  title,
-                  description
-              }
-          }  
-        }    
-              `,
+        query: `query {
+            podcasts(searchTerm: "Reply All") {
+                paginatorInfo {
+                    currentPage,
+                    hasMorePages,
+                    lastPage,
+                },
+                data {
+                    id,
+                    title,
+                    description,
+                    webUrl,
+                }
+            }
+        }`,
       },
     };
     axios
       .request(randPodcasts)
       .then((response) => {
-        console.log(response);
+        console.log('Podcast....', response);
         let newPodcasts = [];
-        response.data.data.podcasts.data.forEach((podcast) => {
-          newPodcasts.push({
-            imageUrl: podcast.imageUrl,
-            title: podcast.title,
-            description: podcast.description,
-          });
-        });
-        Podcast.insertMany(newPodcasts)
-        .then(response => {
-            console.log(response)
-        })
-        .catch((error) => {
-            console.log('error', error)
-        })
+        // response.data.data.podcasts.data.forEach((podcast) => {
+        //   newPodcasts.push({
+        //     imageUrl: podcast.imageUrl,
+        //     title: podcast.title,
+        //     description: podcast.description,
+        //   });
+        // });
+        // Podcast.insertMany(newPodcasts)
+        // .then(response => {
+        //     console.log(response)
+        // })
+        // .catch((error) => {
+        //     console.log('error', error)
+        // })
       })
       .catch((error) => {
         console.log("error", error);
