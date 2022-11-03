@@ -4,34 +4,73 @@ const router = express.Router();
 const Podcast = require('../models/podcast');
 const passport = require('passport');
 const axios = require("axios")
-const token = process.env.TOKEN ;
-
+let token;
+const clientKey = process.env.CLIENT_KEY;
+const clientSecret = process.env.CLIENT_SECRET;
 
 router.post('/', (req, res) => {
     console.log(req.body)
-    const searchTerm = req.body.q
-    const options = {
-        method: 'post',
+    const searchTerm= req.body.q
+    axios({
         url: "https://api.podchaser.com/graphql",
-        params: {q: searchTerm},
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    };
- axios.get( "https://api.podchaser.com/graphql", options).then(function(response){
-    
-    console.log(response.data.podcasts);
-    if (response.status === 200 && response.data.podcasts && response.data.podcasts.length) {
-        res.status(200).render('/', {podcasts: response.data.podcasts});
-    } else {
-        res.status(404).render('404');
-    }
-  }).catch(function (error) {
-      console.error(error);
-  });
-  });
-
-
+        method: "post",
+        data: {
+          query: `
+            mutation {
+                requestAccessToken(
+                    input: {
+                        grant_type: CLIENT_CREDENTIALS
+                        client_id: "${clientKey}"
+                        client_secret: "${clientSecret}"
+                    }
+                ) {
+                    access_token
+                }
+            }
+              `,
+        },
+      })
+        .then((result) => {
+          console.log(result.data);
+          token = result.data.data.requestAccessToken.access_token;
+          const randPodcasts = {
+            method: "post",
+            url: "https://api.podchaser.com/graphql",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            data: {
+              query: `query {
+                  podcasts(searchTerm: "${searchTerm}") {
+                      paginatorInfo {
+                          currentPage,
+                          hasMorePages,
+                          lastPage,
+                      },
+                      data {
+                          imageUrl,
+                          title,
+                          description,
+                    }
+                }  
+              }`,
+            },
+          };
+          axios
+            .request(randPodcasts)
+            .then((response) => {
+              console.log('Loading Podcasts....',response.data.data.podcasts.data);
+              res.json({ podcasts: response.data.data.podcasts.data })
+            })
+            .catch((error) => {
+              console.log("error", error);
+            });
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+      
+})
 
      
 module.exports = router;
