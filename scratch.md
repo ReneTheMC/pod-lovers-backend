@@ -118,3 +118,114 @@ Making a *pull request* from a **fork** [link](https://www.google.com/url?sa=t&r
 TFS: Updating branch with changes from main [link](https://stackoverflow.com/questions/5317703/tfs-updating-branch-with-changes-from-main)
 [How to add authorization header in POSTMAN environment?](https://stackoverflow.com/questions/40539609/how-to-add-authorization-header-in-postman-environment)
 [JSON Web Token](https://github.com/auth0/node-jsonwebtoken)
+
+
+
+  const newComment = new Comment({header: req.body.header,
+        content: req.body.content})
+        newComment.save()
+        post.comments.push(newComment)
+
+
+
+        // ================ COMMENTS ROUTES ========================
+
+app.get('/comments', (req, res) => {
+  Comment.find({})
+  .then(comments => {
+      console.log('All comments', comments);
+      res.json({ comments: comments });
+  })
+  .catch(error => { 
+      console.log('error', error);
+      res.json({ message: "Error ocurred, please try again" });
+  });
+});
+
+app.get('/comments/:id', (req, res) => {
+  console.log('find comment by ID', req.params.id);
+  // console.log(mongoose.Types.ObjectId(req.params.id))
+  Comment.findOne({ _id: mongoose.Types.ObjectId(req.params.id) })
+  .then(comment => {
+      console.log('Here is the comment', comment);
+      res.json({ comment: comment });
+  })
+  .catch(error => { 
+      console.log('error', error);
+      res.json({ message: "Error ocurred, please try again" });
+  });
+});
+
+app.get('/posts/:id/comments', (req, res) => {
+  Post.findById(req.params.id).populate('comments').exec()
+  .then(post => {
+      console.log('Hey is the post', post);
+  })
+})
+
+
+app.post('/podcasts/:id/comments', (req, res) => {
+  Podcast.findById(req.params.id)
+  .then(podcast => {
+      console.log('Heyyy, this is the podcast', podcast);
+      // create and pust comment inside of post
+      Comment.create({
+          header: req.body.header,
+          content: req.body.content
+      })
+      .then(comment => {
+        if(!podcast.comments)
+        {podcast.comments= []}
+          podcast.comments.push(comment);
+          // save the post
+          podcast.save();
+          res.redirect(`/podcasts/${req.params.id}`);
+      })
+      .catch(error => { 
+          console.log('error', error);
+          res.json({ message: "Error ocurred, please try again" });
+      });
+  })
+  .catch(error => { 
+      console.log('error', error);
+      res.json({ message: "Error ocurred, please try again" });
+  });
+});
+
+app.put('/comments/:id', (req, res) => {
+  console.log('route is being on PUT')
+  Comment.findById(req.params.id)
+  .then(foundComment => {
+      console.log('Comment found', foundComment);
+      Comment.findByIdAndUpdate(req.params.id, { 
+              header: req.body.header ? req.body.header : foundComment.header,
+              content: req.body.content ? req.body.content : foundComment.content,
+      }, { 
+          upsert: true 
+      })
+      .then(comment => {
+          console.log('Comment was updated', comment);
+          res.redirect(`/comments/${req.params.id}`);
+      })
+      .catch(error => {
+          console.log('error', error) 
+          res.json({ message: "Error ocurred, please try again" })
+      })
+  })
+  .catch(error => {
+      console.log('error', error) 
+      res.json({ message: "Error ocurred, please try again" })
+  })
+});
+
+app.delete('/comments/:id', (req, res) => {
+  Comment.findByIdAndRemove(req.params.id)
+  .then(response => {
+      console.log('This was deleted', response);
+      res.json({ message: `Comment ${req.params.id} was deleted`});
+  })
+  .catch(error => {
+      console.log('error', error) 
+      res.json({ message: "Error ocurred, please try again" });
+  })
+});

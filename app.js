@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const Podcast = require('./models/podcast');
+const Comment = require("./models/comment");
 require('./config/passport')(passport);
 
 // App Set up
@@ -36,6 +38,15 @@ app.get('/', (req, res) => {
 
 app.use('/examples', require('./controllers/example'));
 app.use('/users', require('./controllers/user'));
+
+// ================ COMMENTS ROUTES ========================
+app.use('/comments', require('./controllers/comments'));
+
+
+app.get('*', (req, res) => {
+    res.json({ message: 'Whatever you were looking for... does not exists.'})
+})
+
 
 // Server
 const server = app.listen(PORT, () => console.log(`Server is running on PORT: ${PORT}`));

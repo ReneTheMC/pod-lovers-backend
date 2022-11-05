@@ -2,23 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const Comment = require('../models/comment');
+const Post = require('../models/post');
 const passport = require('passport');
 const axios = require("axios")
 let token;
 const clientKey = process.env.CLIENT_KEY;
 const clientSecret = process.env.CLIENT_SECRET;
 
-/**
- * Critical documentation to read prior to working with this API. 
- */
-
-/**
- * The code below will be used to authenticating to your api using the API key and secret provided to you when registering with podchaser
- * 
- * Keep in mind, this key will need to be updated often, so you'll need to create a flow that will retry for a new access token every time you get a 403 unauthorized status response(implying your key is no longer valid)
- * 
- * I would not recommend re-generating your access token on every request, as that will eat away at your graphql request points, of which you only have 25,000 on the free tier of podchaser.
- */
 axios({
   url: 'https://api.podchaser.com/graphql',
   method: 'post',
@@ -40,13 +30,7 @@ axios({
 }).then((result) => {
   console.log(result.data)
   token = result.data.data.requestAccessToken.access_token;
-    /**
-     * Once you get you access token, you'll want to attach it to the axios request using a headers property like shown below
-     * 
-     * you will also want to be paying attention to the graphql query(string template below and above). This needs to be added to the request body(inside of data) as a property called query
-     * 
-     * this will use the model passed in the query to generate complex queries on the graphql side allow you to grab from multiple collections in one request.
-     */
+    
   axios({
     url: 'https://api.podchaser.com/graphql',
     method: 'post',
@@ -72,4 +56,72 @@ axios({
 }).catch(err => {
     console.log(err)
 });
+
+
+
+router.get('/', (req, res) => {
+    Comment.find({})
+    .then(comments => {
+        console.log('All comments', comments);
+        res.json({ comments: comments });
+    })
+    .catch(error => { 
+        console.log('error', error);
+        res.json({ message: "Error ocurred, please try again" });
+    });
+});
+
+router.get('/:id', (req, res) => {
+    console.log('find comment by ID', req.params.id);
+    // console.log(mongoose.Types.ObjectId(req.params.id))
+    Comment.findOne({ _id: mongoose.Types.ObjectId(req.params.id) })
+    .then(comment => {
+        console.log('Here is the comment', comment);
+        res.json({ comment: comment });
+    })
+    .catch(error => { 
+        console.log('error', error);
+        res.json({ message: "Error ocurred, please try again" });
+    });
+});
+
+router.put('/:id', (req, res) => {
+    console.log('route is being on PUT')
+    Comment.findById(req.params.id)
+    .then(foundComment => {
+        console.log('Comment found', foundComment);
+        Comment.findByIdAndUpdate(req.params.id, { 
+                header: req.body.header ? req.body.header : foundComment.header,
+                content: req.body.content ? req.body.content : foundComment.content,
+        }, { 
+            upsert: true 
+        })
+        .then(comment => {
+            console.log('Comment was updated', comment);
+            res.redirect(`/comments/${req.params.id}`);
+        })
+        .catch(error => {
+            console.log('error', error) 
+            res.json({ message: "Error ocurred, please try again" })
+        })
+    })
+    .catch(error => {
+        console.log('error', error) 
+        res.json({ message: "Error ocurred, please try again" })
+    })
+});
+
+router.delete('/:id', (req, res) => {
+    Comment.findByIdAndRemove(req.params.id)
+    .then(response => {
+        console.log('This was deleted', response);
+        res.json({ message: `Comment ${req.params.id} was deleted`});
+    })
+    .catch(error => {
+        console.log('error', error) 
+        res.json({ message: "Error ocurred, please try again" });
+    })
+});
+
+
 module.exports = router;
