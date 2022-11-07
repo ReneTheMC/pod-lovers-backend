@@ -51,17 +51,17 @@ The frontend GitHub can be found [here.](https://github.com/ReneTheMC/pod-lovers
 # **Authors**
 
 <div align="center">
-  <a href="https://https://github.com/ruraliz">
+  <a href="https://github.com/ruraliz">
     <img src="https://i.imgur.com/td6nLst.jpg"
       alt="Contributors"
       width="15%" />
   </a>
-    <a href="https://https://github.com/hninmabalo">
+    <a href="https://github.com/hninmabalo">
     <img src="https://i.imgur.com/FMldvPj.jpg"
       alt="Contributors"
       width="15%" />
   </a>
-    <a href="https://https://github.com/ReneTheMC">
+    <a href="https://github.com/ReneTheMC">
     <img src="https://i.imgur.com/Vwsw8Y2.jpg"
       alt="Contributors"
       width="15%" />
