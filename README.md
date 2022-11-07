@@ -1,70 +1,70 @@
-# API Setup
+<!-- https://i.imgur.com/VAvuPtU.png -->
 
-This is a initializing starting point for making an API.
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/ReneTheMC/pod-lovers-backend">
+    <img src=" https://i.imgur.com/VAvuPtU.png " >
+  </a>
 
-### Example Model
+  <h2 align="center">POD LOVERS (Backend)</h2>
+<br>
+<Br>
 
-| Column Name | Data Type | Notes |
-| --------------- | ------------- | ------------------------------ |
-| _id | ObjectId | Made by MongoDB |
-| name | String | Optional in this case |
-| completed | Boolean | `true` or `false` |
-| __v | Number | Made by Mongoose |
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Technologies Used</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#ERD">ERD</a>
+    </li>
+     <li><a href="#future-enhancements">Future Enhancements</a></li>
+     <li><a href="#authors">Authors</a></li>
 
-### Examples - Default Routes
+ </ol>
+</details>
 
-| Method | Path | Location | Purpose |
-| ------ | ---------------- | -------------- | ------------------- |
-| GET | / | app.js | Welcome to API |
-| GET | /examples | example.js | Get all examples |
-| GET | /examples/:id | example.js | Get one example |
-| POST | /examples | example.js | Create an example |
-| PUT | /examples/:id | example.js | Update an example |
-| DELETE | /examples/:id | example.js | Delete an example |
+<!-- ABOUT THE PROJECT -->
+# **About The Project**
+The Pod Lovers App is built using GraphQL to access Podchaser API. We used MongoDB for our database with full CRUD operations on the podcast and creator models.  
 
-## Examples - Detailed Info
+The live version of this app can be viewed [here.]()
 
-Detailed info for serialized examples
-- Get all examples : GET /examples
-- Get one example : GET /examples/:id
-- Create a capsule : POST /examples
-- Update a capsule : PUT /examples/:id
-- Delete a capsule : DELETE /examples/:id
+The frontend GitHub can be found [here.](https://github.com/ReneTheMC/pod-lovers-frontend)
 
+# **Built With**
+* [Heroku](https://dashboard.heroku.com/apps)
+* [GraphQL](https://graphql.org/learn/)
+* [Podchaser](https://www.podchaser.com/)
 
-## Users
+# **Future Enhancements**
+* Ability for users to suggest podcasts to other Users
+* Ability for users to search podcasts by topic/category
+* Ability for users to upload their own profile picture through 
 
-| Column Name | Data Type | Notes |
-| --------------- | ------------- | ------------------------------ |
-| id | ObjectId | Made by MongoDB |
-| name | String | required |
-| email | String | required |
-| password | String | required (hash) |
-| date | Date | Set default date  |
-| __v | Number | Made by Mongoose |
+# **Authors**
 
-## Users - Default Routes
-
-| Method | Path | Location | Purpose |
-| ------ | ---------------- | -------------- | ------------------- |
-| GET | /users/test | user.js | Test route for users, no user returned |
-| POST | /users/register | user.js | Create a new user and add to DB |
-| POST | /users/login | user.js | Logs user in via credentials, returns user |
-| GET | /users/profile | user.js | Protected route, need token to access |
-
-# Users - Detailed Info
-
-Detailed info for serialized examples
-- Test user routes : GET /users/test
-- Create a user : POST /users/signup
-- Login a user : POST /users/login
-- Return user data (must login beforehand and use token) : GET /users/profile
-
-
-# How to Use the Spotify API
-
-- [ ] Install `axios`
-```text
-npm install axios
-```
+<div align="center">
+  <a href="https://https://github.com/ruraliz">
+    <img src="https://i.imgur.com/td6nLst.jpg"
+      alt="Contributors"
+      width="15%" />
+  </a>
+    <a href="https://https://github.com/hninmabalo">
+    <img src="https://i.imgur.com/FMldvPj.jpg"
+      alt="Contributors"
+      width="15%" />
+  </a>
+    <a href="https://https://github.com/ReneTheMC">
+    <img src="https://i.imgur.com/Vwsw8Y2.jpg"
+      alt="Contributors"
+      width="15%" />
+  </a>
+</div>
 
