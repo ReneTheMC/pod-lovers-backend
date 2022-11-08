@@ -118,5 +118,38 @@ router.get('/messages', passport.authenticate('jwt', { session: false }), async 
     res.json({ id, name, email, message: messageArray, sameUser });
 });
 
+//Add creator to favorites 
+router.post('/AddFavorites',passport.authenticate('jwt', { session: false }), (req,res) => {    
+if (!req.user.favorites.find( favorite => {
+    return favorite.pcid === req.body.pcid
+})) {
+    const newFavorites= {
+        pcid:req.body.pcid,
+        name:req.body.name,
+        bio:req.body.bio,
+        location:req.body.location,
+        imageUrl:req.body.imageUrl
+    }
+    if (!Array.isArray(req.user.favorites)){
+        req.user.favorites=[]
+    }
+    req.user.favorites.push(newFavorites)
+    req.user.save()
+    res.json(newFavorites)
+}
+});
+
+router.get('/getfavorites', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.user.id)
+    .then(user => {
+        console.log('One user', user);
+        res.json({ favorites: user.favorites});
+    })
+    .catch(error => { 
+        console.log('error', error);
+        res.json({ message: "Error ocurred, please try again" });
+    });
+});
+
 // Exports
 module.exports = router;
