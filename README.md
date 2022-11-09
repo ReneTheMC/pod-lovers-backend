@@ -6,7 +6,6 @@
   <a href="https://github.com/ReneTheMC/pod-lovers-backend">
     <img src=" https://i.imgur.com/VAvuPtU.png " >
   </a>
-
   <h2 align="center">POD LOVERS (Backend)</h2>
 <br>
 <Br>
@@ -21,10 +20,11 @@
         <li><a href="#built-with">Technologies Used</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#ERD">ERD</a>
-    </li>
+    <li><a href="#Logo">Logo</a></li>
+    <li><a href="#ERD">ERD</a></li>
+    <li><a href="#Wireframes">Wireframes</a></li>
      <li><a href="#future-enhancements">Future Enhancements</a></li>
+     <li><a href="#credit">Credits</a></li>
      <li><a href="#authors">Authors</a></li>
 
  </ol>
@@ -43,6 +43,20 @@ The frontend GitHub can be found [here.](https://github.com/ReneTheMC/pod-lovers
 * [GraphQL](https://graphql.org/learn/)
 * [Podchaser](https://www.podchaser.com/)
 
+# **Logo**
+* ![Logo](./image/podlogo0.png)
+
+# **ERD**
+* ![ERD](./image/PodLovers%20ERD.png)
+
+# **Wireframes**
+* Home Page
+* ![Wireframes](./image/Podcasts%20HOME%20page.png)
+* Detail Page
+* ![Wireframes](./image/podcast%20details%20page.png)
+* Favorite List page
+* ![Wireframes](./image/podcast%20favorite%20lists%20page.png)
+
 # **Future Enhancements**
 * Ability for users to suggest podcasts to other Users
 * Ability for users to search podcasts by topic/category
@@ -51,17 +65,17 @@ The frontend GitHub can be found [here.](https://github.com/ReneTheMC/pod-lovers
 # **Authors**
 
 <div align="center">
-  <a href="https://github.com/ruraliz">
+  <a href="https://github.com/ruraliz" target="_blank">
     <img src="https://i.imgur.com/td6nLst.jpg"
       alt="Contributors"
       width="15%" />
   </a>
-    <a href="https://github.com/hninmabalo">
+    <a href="https://github.com/hninmabalo" target="_blank">
     <img src="https://i.imgur.com/FMldvPj.jpg"
       alt="Contributors"
       width="15%" />
   </a>
-    <a href="https://github.com/ReneTheMC">
+    <a href="https://github.com/ReneTheMC" target="_blank">
     <img src="https://i.imgur.com/Vwsw8Y2.jpg"
       alt="Contributors"
       width="15%" />
