@@ -11,25 +11,25 @@ const clientSecret = process.env.CLIENT_SECRET;
 
 //routes
 //test endpoint 
-router.get('/test', (req, res) => {
-  res.json({ message: "Podcast endpoint." });
-})
+// router.get('/test', (req, res) => {
+//   res.json({ message: "Podcast endpoint." });
+// })
 
 //get all podcasts
-router.get('/', (req, res) => {
-  Podcast.find({})
-    .then(podcasts => {
-      console.log('All podcasts', podcasts);
-      res.json({ podcasts: podcasts });
-    })
-    .catch(error => {
-      console.log('Error', error);
-      res.json({ message: "Error ocurred" });
-    });
-})
+// router.get('/', (req, res) => {
+//   Podcast.find({})
+//     .then(podcasts => {
+//       console.log('All podcasts', podcasts);
+//       res.json({ podcasts: podcasts });
+//     })
+//     .catch(error => {
+//       console.log('Error', error);
+//       res.json({ message: "Error ocurred" });
+//     });
+// })
 
 //get one podcast by search term
-router.post('/', (req, res) => {
+router.post('/results', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log(req.body)
   const searchTerm = req.body.q
   axios({
@@ -69,6 +69,7 @@ router.post('/', (req, res) => {
                           lastPage,
                       },
                       data {
+                          id,
                           imageUrl,
                           title,
                           description,
@@ -94,6 +95,7 @@ router.post('/', (req, res) => {
 })
 
 //create podcast
+
 router.post('/', (req, res) => {
   Podcast.create({
     imageUrl: req.body.imageUrl,
@@ -110,35 +112,37 @@ router.post('/', (req, res) => {
     });
 })
 
+
 //find podcast by title and update
-router.put('/:title', (req, res) => {
-  console.log('Searching Podcast..')
-  Podcast.findOne({ title: req.params.title })
-    .then(foundPodcast => {
-      console.log('Podcast found', foundPodcast);
-      Podcast.findOneAndUpdate( req.params.title, {
-        imageUrl: req.body.imageUrl ? req.body.imageUrl : foundPodcast.imageUrl,
-        title: req.body.title ? req.body.title : foundPodcast.title,
-        description: req.body.description ? req.body.description : foundPodcast.description
-      }, {
-        upsert: true
-      })
-        .then(podcast => {
-          console.log('podcast was updated', podcast);
-          res.redirect(`/podcasts/${req.params.title}`)
-        })
-        .catch(error => {
-          consol.log('error', error);
-          res.json({ message: "Error ocurred" });
-        })
-    })
-    .catch(error => {
-      console.log('error', error)
-      res.json({ message: 'Error ocurred' });
-    })
-});
+// router.put('/:title', (req, res) => {
+//   console.log('Searching Podcast..')
+//   Podcast.findOne({ title: req.params.title })
+//     .then(foundPodcast => {
+//       console.log('Podcast found', foundPodcast);
+//       Podcast.findOneAndUpdate( req.params.title, {
+//         imageUrl: req.body.imageUrl ? req.body.imageUrl : foundPodcast.imageUrl,
+//         title: req.body.title ? req.body.title : foundPodcast.title,
+//         description: req.body.description ? req.body.description : foundPodcast.description
+//       }, {
+//         upsert: true
+//       })
+//         .then(podcast => {
+//           console.log('podcast was updated', podcast);
+//           res.redirect(`/podcasts/${req.params.title}`)
+//         })
+//         .catch(error => {
+//           consol.log('error', error);
+//           res.json({ message: "Error ocurred" });
+//         })
+//     })
+//     .catch(error => {
+//       console.log('error', error)
+//       res.json({ message: 'Error ocurred' });
+//     })
+// });
 
 //delete podcast by title
+
 router.delete('/:title', (req, res) => {
   Podcast.findOneAndRemove({ title: req.params.title})
   .then(response => {
@@ -152,48 +156,49 @@ router.delete('/:title', (req, res) => {
 });
 
 
+
 //=================== association with comment =======================
 
-// GET a podcast's comments
-router.get('/:title/comments', (req, res) => {
-  Podcast.findOne(req.params.title).populate('comments').exec()
-  .then(podcast => {
-      console.log('This is the podcast', podcast);
-  })
-})
+// // GET a podcast's comments
+// router.get('/:title/comments', (req, res) => {
+//   Podcast.findOne(req.params.title).populate('comments').exec()
+//   .then(podcast => {
+//       console.log('This is the podcast', podcast);
+//   })
+// })
 
-// create a comment on a podcast
-router.post('/:title/comments', (req, res) => {
-  Podcast.findOne(req.params.title)
-  .then(podcast => {
-      console.log('Heyyy, this is the podcast', podcast);
-      // create and pust comment inside of podcast
-      Comment.create({
-        pcid: req.body.pcid,
-        user: req.body.user,
-        rating: req.body.rating,
-        content: req.body.content,
-        url: req.body.url,
-        reviewedAt: req.body.reviewAt,
-        modifiedDate: req.body.modifiedDate,
-        reply: req.body.reply,
-      })
-      .then(comment => {
-          podcast.comments.push(comment);
-          // save the podcast
-          podcast.save();
-          res.redirect(`/podcasts/${req.params.title}`);
-      })
-      .catch(error => { 
-          console.log('error', error);
-          res.json({ message: "Error ocurred" });
-      });
-  })
-  .catch(error => { 
-      console.log('error', error);
-      res.json({ message: "Error ocurred" });
-  });
-});
+// // create a comment on a podcast
+// router.post('/:title/comments', (req, res) => {
+//   Podcast.findOne(req.params.title)
+//   .then(podcast => {
+//       console.log('Heyyy, this is the podcast', podcast);
+//       // create and pust comment inside of podcast
+//       Comment.create({
+//         pcid: req.body.pcid,
+//         user: req.body.user,
+//         rating: req.body.rating,
+//         content: req.body.content,
+//         url: req.body.url,
+//         reviewedAt: req.body.reviewAt,
+//         modifiedDate: req.body.modifiedDate,
+//         reply: req.body.reply,
+//       })
+//       .then(comment => {
+//           podcast.comments.push(comment);
+//           // save the podcast
+//           podcast.save();
+//           res.redirect(`/podcasts/${req.params.title}`);
+//       })
+//       .catch(error => { 
+//           console.log('error', error);
+//           res.json({ message: "Error ocurred" });
+//       });
+//   })
+//   .catch(error => { 
+//       console.log('error', error);
+//       res.json({ message: "Error ocurred" });
+//   });
+// });
 
 
 module.exports = router;

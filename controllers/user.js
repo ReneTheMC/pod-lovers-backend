@@ -118,6 +118,7 @@ router.get('/messages', passport.authenticate('jwt', { session: false }), async 
     res.json({ id, name, email, message: messageArray, sameUser });
 });
 
+
 //Add creator to favorites 
 router.post('/AddFavorites',passport.authenticate('jwt', { session: false }), (req,res) => {    
 if (!req.user.favorites.find( favorite => {
@@ -172,5 +173,60 @@ router.delete('/favorites/:pcid', passport.authenticate('jwt', { session: false 
         res.json({ message: "Error ocurred, please try again" });
     })
 });  
+
+//favorites podcast route
+router.post('/AddFavPodcastList',passport.authenticate('jwt', { session: false }), (req,res) => {    
+    if (!req.user.favPodcastList.find( favPodcastList => {
+        return favPodcastList.id === req.body.id
+    })) {
+        const newFavorites= {
+            id:req.body.id,
+            imageUrl:req.body.imageUrl,
+            title: req.body.title,
+            description: req.body.description
+        }
+        if (!Array.isArray(req.user.favPodcastList)){
+            req.user.favPodcastList=[]
+        }
+        req.user.favPodcastList.push(newFavorites)
+        req.user.save()
+        res.json(newFavorites)
+    }
+    });
+    
+    router.get('/getFavPodcastList', passport.authenticate('jwt', { session: false }), (req, res) => {
+        User.findById(req.user.id)
+        .then(user => {
+            console.log('One user', user);
+            res.json({ favPodcastList : user.favPodcastList});
+        })
+        .catch(error => { 
+            console.log('error', error);
+            res.json({ message: "Error ocurred, please try again" });
+        });
+    });
+    
+//delete from favorites podcast
+    router.delete('/favPodcastLists/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+        User.updateOne({_id: req.user._id} , { $pull: { favPodcastList: { id: req.params.id } }},{ safe: true, multi:true })
+        .then((updatedUser) => {
+            console.log("update....." , updatedUser)
+            User.findById(req.user.id)
+            .then(user => {
+                console.log('One user', user);
+                res.json({ favPodcastList: user.favPodcastList});
+            })
+            .catch(error => { 
+                console.log('error', error);
+                res.json({ message: "Error ocurred, please try again" });
+            });
+        })
+        .catch(error => {
+            console.log('error', error);
+            res.json({ message: "Error ocurred, please try again" });
+        })
+    });  
+
+  
 // Exports
 module.exports = router;
