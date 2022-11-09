@@ -9,6 +9,7 @@ let token;
 const clientKey = process.env.CLIENT_KEY;
 const clientSecret = process.env.CLIENT_SECRET;
 
+
 //get one podcast by search term
 router.post('/results', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log(req.body)

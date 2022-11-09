@@ -205,6 +205,7 @@ router.post('/AddFavPodcastList',passport.authenticate('jwt', { session: false }
             res.json({ message: "Error ocurred, please try again" });
         });
     });
+
 //delete from favorites podcast
     router.delete('/favPodcastLists/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
         User.updateOne({_id: req.user._id} , { $pull: { favPodcastList: { id: req.params.id } }},{ safe: true, multi:true })

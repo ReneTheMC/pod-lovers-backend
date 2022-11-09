@@ -22,11 +22,8 @@ const userSchema = new Schema({
         type: Date,
         default: Date.now()
     },
-
     favPodcastList : [podcastSchema],
-    favorites : [creatorSchema],
- 
-    
+    favorites : [creatorSchema]    
 })
 
 
