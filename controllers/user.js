@@ -153,16 +153,24 @@ router.get('/getfavorites', passport.authenticate('jwt', { session: false }), (r
     });
 });
 //delete from favorites 
-router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-    req.user.favorites.findByIdAndRemove(req.body.pcid)
-    .then(user => {
-        console.log('This was deleted',user.favorites.pcid);
-        res.json({delete: user.favorites.pcid});
-            })
-    .catch(error => {
-        console.log('error', error) 
-        res.json({ message: "Error ocurred, please try again" });
+router.delete('/favorites/:pcid', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.updateOne({_id: req.user._id} , { $pull: { favorites: { pcid: req.params.pcid } }},{ safe: true, multi:true })
+    .then((updatedUser) => {
+        console.log("update....." , updatedUser)
+        User.findById(req.user.id)
+        .then(user => {
+            console.log('One user', user);
+            res.json({ favorites: user.favorites});
         })
-    });  
+        .catch(error => { 
+            console.log('error', error);
+            res.json({ message: "Error ocurred, please try again" });
+        });
+    })
+    .catch(error => {
+        console.log('error', error);
+        res.json({ message: "Error ocurred, please try again" });
+    })
+});  
 // Exports
 module.exports = router;
