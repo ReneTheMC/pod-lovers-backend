@@ -8,7 +8,8 @@ let token;
 const clientKey = process.env.CLIENT_KEY;
 const clientSecret = process.env.CLIENT_SECRET;
 
-router.post('/', (req, res) => {
+//search creators
+router.post('/results',passport.authenticate('jwt', { session: false }), (req, res) => {
     console.log(req.body)
     const searchTerm= req.body.q
     axios({
@@ -48,9 +49,15 @@ router.post('/', (req, res) => {
                           lastPage,
                       },
                       data {
+                          pcid,  
                           name,
                           bio,
                           location,
+                          imageUrl,
+                          birthday,
+                          followerCount
+                          
+        
                     }
                 }  
               }`,
@@ -71,6 +78,5 @@ router.post('/', (req, res) => {
         });
       
 })
-
-     
+ 
 module.exports = router;

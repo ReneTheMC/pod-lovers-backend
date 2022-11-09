@@ -6,9 +6,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const { JWT_SECRET } = process.env;
-
 // DB Models
 const User = require('../models/user');
+const { Response } = require('node-fetch');
 
 // Controllers
 router.get('/test', (req, res) => {
@@ -118,5 +118,59 @@ router.get('/messages', passport.authenticate('jwt', { session: false }), async 
     res.json({ id, name, email, message: messageArray, sameUser });
 });
 
+//Add creator to favorites 
+router.post('/AddFavorites',passport.authenticate('jwt', { session: false }), (req,res) => {    
+if (!req.user.favorites.find( favorite => {
+    return favorite.pcid === req.body.pcid
+})) {
+    const newFavorites= {
+        pcid:req.body.pcid,
+        name:req.body.name,
+        bio:req.body.bio,
+        location:req.body.location,
+        imageUrl:req.body.imageUrl,
+        birthday: req.body.birthday,
+        followerCount: req.body.followerCount
+    }
+    if (!Array.isArray(req.user.favorites)){
+        req.user.favorites=[]
+    }
+    req.user.favorites.push(newFavorites)
+    req.user.save()
+    res.json(newFavorites)
+}
+});
+
+router.get('/getfavorites', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.findById(req.user.id)
+    .then(user => {
+        console.log('One user', user);
+        res.json({ favorites: user.favorites});
+    })
+    .catch(error => { 
+        console.log('error', error);
+        res.json({ message: "Error ocurred, please try again" });
+    });
+});
+//delete from favorites 
+router.delete('/favorites/:pcid', passport.authenticate('jwt', { session: false }), (req, res) => {
+    User.updateOne({_id: req.user._id} , { $pull: { favorites: { pcid: req.params.pcid } }},{ safe: true, multi:true })
+    .then((updatedUser) => {
+        console.log("update....." , updatedUser)
+        User.findById(req.user.id)
+        .then(user => {
+            console.log('One user', user);
+            res.json({ favorites: user.favorites});
+        })
+        .catch(error => { 
+            console.log('error', error);
+            res.json({ message: "Error ocurred, please try again" });
+        });
+    })
+    .catch(error => {
+        console.log('error', error);
+        res.json({ message: "Error ocurred, please try again" });
+    })
+});  
 // Exports
 module.exports = router;
