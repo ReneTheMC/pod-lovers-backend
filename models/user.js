@@ -22,7 +22,7 @@ const userSchema = new Schema({
     },
     favorites:[creatorSchema],
     // favoritePodcast:[podcastSchema]
-    commen
+    
 })
 
 
