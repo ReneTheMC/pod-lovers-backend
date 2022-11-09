@@ -2,15 +2,16 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const podcastSchema = new Schema({
+    id: String,
     imageUrl: String,
     title: String,
     description: String,
-    comments: {
-        type: mongoose.Types.ObjectId,
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Comment"
-    }
+    }]
 });
 
-const Podcast = mongoose.model('Podcast', podcastSchema);
+// const Podcast = mongoose.model('Podcast', podcastSchema);
 
-module.exports = Podcast;
+// module.exports = Podcast;

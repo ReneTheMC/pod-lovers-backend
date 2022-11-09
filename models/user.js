@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const podcastSchema = require('./podcast');
 
 const userSchema = new Schema({
     name: {
@@ -18,7 +19,8 @@ const userSchema = new Schema({
     date: {
         type: Date,
         default: Date.now()
-    }
+    },
+    favPodcastList: [podcastSchema]
 })
 
 const User = mongoose.model('User', userSchema);
