@@ -95,21 +95,23 @@ router.post('/results', passport.authenticate('jwt', { session: false }), (req, 
 })
 
 //create podcast
-// router.post('/', (req, res) => {
-//   Podcast.create({
-//     imageUrl: req.body.imageUrl,
-//     title: req.body.title,
-//     description: req.body.description
-//   })
-//     .then(podcast => {
-//       console.log("New podcast created", podcast);
-//       res.json({ podcast: podcast });
-//     })
-//     .catch(error => {
-//       console.log("error", error)
-//       res.json({ message: "Error ocurred" });
-//     });
-// })
+
+router.post('/', (req, res) => {
+  Podcast.create({
+    imageUrl: req.body.imageUrl,
+    title: req.body.title,
+    description: req.body.description
+  })
+    .then(podcast => {
+      console.log("New podcast created", podcast);
+      res.json({ podcast: podcast });
+    })
+    .catch(error => {
+      console.log("error", error)
+      res.json({ message: "Error ocurred" });
+    });
+})
+
 
 //find podcast by title and update
 // router.put('/:title', (req, res) => {
@@ -140,17 +142,20 @@ router.post('/results', passport.authenticate('jwt', { session: false }), (req, 
 // });
 
 //delete podcast by title
-// router.delete('/:title', (req, res) => {
-//   Podcast.findOneAndRemove({ title: req.params.title})
-//   .then(response => {
-//     console.log('Podcast was deleted', response);
-//     res.json({ message: `${req.params.title} was deleted`});
-//   })
-//   .catch(error => {
-//     console.log('Error', error)
-//     res.json({ message : "Error ocurred"});
-//   })
-// });
+
+router.delete('/:title', (req, res) => {
+  Podcast.findOneAndRemove({ title: req.params.title})
+  .then(response => {
+    console.log('Podcast was deleted', response);
+    res.json({ message: `${req.params.title} was deleted`});
+  })
+  .catch(error => {
+    console.log('Error', error)
+    res.json({ message : "Error ocurred"});
+  })
+});
+
+
 
 //=================== association with comment =======================
 
