@@ -8,7 +8,8 @@ module.exports = new Schema({
     bio:String,
     location:String,
     imageUrl:String,
-    socialLinks:String, 
+    birthday: String,
+    followerCount: String,
 comments: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Comment'

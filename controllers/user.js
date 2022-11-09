@@ -6,9 +6,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const { JWT_SECRET } = process.env;
-
 // DB Models
 const User = require('../models/user');
+const { Response } = require('node-fetch');
 
 // Controllers
 router.get('/test', (req, res) => {
@@ -128,7 +128,9 @@ if (!req.user.favorites.find( favorite => {
         name:req.body.name,
         bio:req.body.bio,
         location:req.body.location,
-        imageUrl:req.body.imageUrl
+        imageUrl:req.body.imageUrl,
+        birthday: req.body.birthday,
+        followerCount: req.body.followerCount
     }
     if (!Array.isArray(req.user.favorites)){
         req.user.favorites=[]
@@ -150,6 +152,17 @@ router.get('/getfavorites', passport.authenticate('jwt', { session: false }), (r
         res.json({ message: "Error ocurred, please try again" });
     });
 });
-
+//delete from favorites 
+router.delete('/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    req.user.favorites.findByIdAndRemove(req.body.pcid)
+    .then(user => {
+        console.log('This was deleted',user.favorites.pcid);
+        res.json({delete: user.favorites.pcid});
+            })
+    .catch(error => {
+        console.log('error', error) 
+        res.json({ message: "Error ocurred, please try again" });
+        })
+    });  
 // Exports
 module.exports = router;
