@@ -61,6 +61,7 @@ The frontend GitHub can be found [here.](https://github.com/ReneTheMC/pod-lovers
 * Ability for users to suggest podcasts to other Users
 * Ability for users to search podcasts by topic/category
 * Ability for users to upload their own profile picture through 
+* More Updates to come
 
 # **Authors**
 
